@@ -70,7 +70,7 @@ sub _caller {
   my $depth = $self->{caller_depth} || 0;
   my $clan  = $self->{caller_clan};
 
-  $depth += 3;
+  $depth += 2;
 
   if (defined $clan) {
     my $c; do {
