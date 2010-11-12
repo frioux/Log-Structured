@@ -19,9 +19,9 @@ has log_event_listeners => (
   default => quote_sub q{ [] },
 );
 
-has "log_$_" => (
-  is => 'rw',
-)for qw(
+has $_ => ( is => 'rw' ) for qw( category priority message );
+
+has "log_$_" => ( is => 'rw' ) for qw(
   milliseconds_since_start milliseconds_since_last_log
   line file package subroutine category priority
   date host pid
@@ -64,12 +64,6 @@ sub file { shift->_caller->[1] }
 sub package { shift->_caller->[0] }
 
 sub subroutine { shift->_caller->[3] }
-
-sub category { shift->{category} }
-
-sub message { shift->{message} }
-
-sub priority { shift->{priority} }
 
 sub _caller {
   my $self = shift;
