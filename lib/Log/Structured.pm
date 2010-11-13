@@ -24,7 +24,7 @@ has $_ => ( is => 'rw' ) for qw( category priority message );
 has "log_$_" => ( is => 'rw' ) for qw(
   milliseconds_since_start milliseconds_since_last_log
   line file package subroutine category priority
-  date host pid
+  date host pid stacktrace
 );
 
 sub add_log_event_listener {
@@ -43,7 +43,7 @@ sub log_event {
    $self->${\"log_$_"} and $event_data->{$_} ||= $self->$_ for qw(
       milliseconds_since_start milliseconds_since_last_log
       line file package subroutine category priority
-      date host pid
+      date host pid stacktrace
    );
 
    $self->$_($event_data) for @{$self->log_event_listeners}
@@ -67,19 +67,8 @@ sub subroutine { shift->_caller->[3] }
 
 sub _caller {
   my $self = shift;
-  my $depth = $self->{caller_depth} || 0;
-  my $clan  = $self->{caller_clan};
 
-  $depth += 2;
-
-  if (defined $clan) {
-    my $c; do {
-      $c = caller ++$depth;
-    } while $c && $c =~ $clan;
-    return [caller $depth]
-  } else {
-    return [caller $depth]
-  }
+  $self->_sound_depth->[1]
 }
 
 sub date { return [localtime] }
@@ -90,5 +79,36 @@ sub host {
 }
 
 sub pid { $$ }
+
+sub stacktrace {
+  my $self = shift;
+
+  my @trace;
+  my $i = $self->_sound_depth(-1)->[0] - 1;
+  while (my @callerinfo = caller($i)) {
+    $i++;
+    push @trace, \@callerinfo
+  }
+  \@trace
+}
+
+sub _sound_depth {
+  my $self = shift;
+
+  my $depth = $self->{caller_depth} || 0;
+  my $clan  = $self->{caller_clan};
+
+  $depth += 3;
+  $depth += $_[0] if exists $_[0];
+
+  if (defined $clan) {
+    my $c; do {
+      $c = caller ++$depth;
+    } while $c && $c =~ $clan;
+    return [$depth, [caller $depth]]
+  } else {
+    return [$depth, [caller $depth]]
+  }
+}
 
 1;
