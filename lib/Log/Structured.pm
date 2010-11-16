@@ -19,7 +19,12 @@ has log_event_listeners => (
   default => quote_sub q{ [] },
 );
 
-has $_ => ( is => 'rw' ) for qw( category priority message );
+has $_ => ( is => 'rw' ) for qw( caller_clan category priority message );
+
+has caller_depth => (
+   is => 'rw',
+   predicate => 'has_caller_depth',
+);
 
 has "log_$_" => ( is => 'rw' ) for qw(
   milliseconds_since_start milliseconds_since_last_log
@@ -95,8 +100,8 @@ sub stacktrace {
 sub _sound_depth {
   my $self = shift;
 
-  my $depth = $self->{caller_depth} || 0;
-  my $clan  = $self->{caller_clan};
+  my $depth = $self->has_caller_depth ? $self->caller_depth : 0;
+  my $clan  = $self->caller_clan;
 
   $depth += 3;
   $depth += $_[0] if exists $_[0];
