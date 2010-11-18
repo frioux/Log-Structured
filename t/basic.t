@@ -15,7 +15,6 @@ my $l_s = Log::Structured->new({
   log_subroutine => 1,
   log_category   => 1,
   log_priority   => 1,
-  date           => 1,
   log_event_listeners => [sub { $var = $_[1] }],
 });
 
