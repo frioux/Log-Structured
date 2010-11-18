@@ -19,7 +19,9 @@ has log_event_listeners => (
   default => quote_sub q{ [] },
 );
 
-has $_ => ( is => 'rw' ) for qw( caller_clan category priority message );
+has $_ => ( is => 'rw' ) for qw(
+   caller_clan category priority start_time last_event
+);
 
 has caller_depth => (
    is => 'rw',
@@ -41,6 +43,11 @@ sub add_log_event_listener {
    push @{$self->log_event_listeners}, $_[1]
 }
 
+sub BUILD {
+   $_[0]->start_time([gettimeofday]);
+   $_[0]->last_event([gettimeofday]);
+}
+
 sub log_event {
    my $self = shift;
    my $event_data = shift;
@@ -51,15 +58,17 @@ sub log_event {
       date host pid stacktrace
    );
 
-   $self->$_($event_data) for @{$self->log_event_listeners}
+   $self->$_($event_data) for @{$self->log_event_listeners};
+
+   $self->last_event([gettimeofday]);
 }
 
 sub milliseconds_since_start {
-   int tv_interval(shift->{start_time}, [ gettimeofday ]) * 1000
+   int tv_interval(shift->start_time, [ gettimeofday ]) * 1000
 }
 
 sub milliseconds_since_last_log {
-   int tv_interval(shift->{last_event}, [ gettimeofday ]) * 1000
+   int tv_interval(shift->last_event, [ gettimeofday ]) * 1000
 }
 
 sub line { shift->_caller->[2] }
