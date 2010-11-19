@@ -98,7 +98,7 @@ sub stacktrace {
   my $self = shift;
 
   my @trace;
-  my $i = $self->_sound_depth(-1)->[0] - 1;
+  my $i = 1;
   while (my @callerinfo = caller($i)) {
     $i++;
     push @trace, \@callerinfo
