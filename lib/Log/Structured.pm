@@ -116,7 +116,6 @@ sub _sound_depth {
   my $clan  = $self->caller_clan;
 
   $depth += 3;
-  $depth += $_[0] if exists $_[0];
 
   if (defined $clan) {
     my $c; do {
