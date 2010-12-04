@@ -12,7 +12,7 @@ has log_event_listeners => (
       unless ref $_[0] && ref $_[0] eq 'ARRAY';
 
     for (@{$_[0]}) {
-      die "each log_event_listener must be an coderef!"
+      die "each log_event_listener must be a coderef!"
         unless ref $_ && ref $_ eq 'CODE';
     }
   >),
@@ -38,7 +38,7 @@ sub add_log_event_listener {
   my $self = shift;
   my $code = shift;
 
-  die "each log_event_listener must be an coderef!"
+  die 'log_event_listener must be a coderef!'
     unless ref $code && ref $code eq 'CODE';
 
    push @{$self->log_event_listeners}, $code

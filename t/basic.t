@@ -1,6 +1,7 @@
 use strictures 1;
 use Test::More;
 use Test::Deep;
+use Test::Fatal;
 
 use Log::Structured;
 
@@ -18,6 +19,17 @@ my $l_s = Log::Structured->new({
 });
 
 $l_s->add_log_event_listener(sub { $var = $_[1] });
+
+like exception { $l_s->add_log_event_listener(1) },
+   qr/^log_event_listener must be a coderef!/,
+   'add_log_event_listener is validated correctly';
+
+ok !exception { Log::Structured->new({ log_event_listeners => [sub {}] }) },
+   'log_event_listener passes through correctly';
+
+like exception { Log::Structured->new({ log_event_listeners => [sub {},1] }) },
+   qr/^each log_event_listener must be a coderef!/,
+   'log_event_listener is validated correctly';
 
 $l_s->log_event({
    message => 'frew',
