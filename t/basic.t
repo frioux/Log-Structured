@@ -24,6 +24,10 @@ like exception { $l_s->add_log_event_listener(1) },
    qr/^log_event_listener must be a coderef!/,
    'add_log_event_listener is validated correctly';
 
+like exception { $l_s->add_log_event_listener([]) },
+   qr/^log_event_listener must be a coderef!/,
+   'add_log_event_listener is validated correctly';
+
 ok !exception { Log::Structured->new({ log_event_listeners => [sub {}] }) },
    'log_event_listener passes through correctly';
 
@@ -59,5 +63,28 @@ cmp_deeply( $var, {
    message  => 'frew',
    file     => __FILE__,
 }, 'overriding category works');
+
+{
+  my $v;
+  my $more_stuff = Log::Structured->new({
+    log_milliseconds_since_start => 1,
+    log_milliseconds_since_last_log => 1,
+    log_date => 1,
+    log_host => 1,
+    log_pid => 1,
+    log_event_listeners => [ sub { $v = $_[1] } ],
+  });
+
+  $more_stuff->log_event({ message => 'frew' });
+
+  cmp_deeply( $v, {
+    date => [(ignore()) x 9],
+    host => ignore(),
+    message => 'frew',
+    milliseconds_since_start => ignore(),
+    milliseconds_since_last_log => ignore(),
+    pid => $$,
+  }, 'All extra keys are logged');
+}
 
 done_testing;
