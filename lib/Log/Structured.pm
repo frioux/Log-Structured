@@ -1,5 +1,7 @@
 package Log::Structured;
 
+# ABSTRACT: Log events in a structured manner
+
 use Moo;
 use Sub::Quote;
 
