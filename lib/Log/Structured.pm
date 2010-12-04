@@ -36,11 +36,12 @@ has "log_$_" => ( is => 'rw' ) for qw(
 
 sub add_log_event_listener {
   my $self = shift;
+  my $code = shift;
 
   die "each log_event_listener must be an coderef!"
-    unless ref $_[1] && ref $_[1] eq 'CODE';
+    unless ref $code && ref $code eq 'CODE';
 
-   push @{$self->log_event_listeners}, $_[1]
+   push @{$self->log_event_listeners}, $code
 }
 
 sub BUILD {

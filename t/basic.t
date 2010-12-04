@@ -15,8 +15,9 @@ my $l_s = Log::Structured->new({
   log_subroutine => 1,
   log_category   => 1,
   log_priority   => 1,
-  log_event_listeners => [sub { $var = $_[1] }],
 });
+
+$l_s->add_log_event_listener(sub { $var = $_[1] });
 
 $l_s->log_event({
    message => 'frew',
