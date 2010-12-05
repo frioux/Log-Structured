@@ -166,7 +166,7 @@ sub _sound_depth {
 
 This module is meant to produce logging data flexibly and powerfully.  All of
 the data that it produces can easilly be serialized or put into a database or
-whatever else you may want to do with it.
+printed on the top of a cake or whatever else you may want to do with it.
 
 =head1 ATTRIBUTES
 
@@ -177,10 +177,10 @@ as an argument
 
 =head2 caller_clan
 
-A stringified regex representing packages to allow when getting any caller
+A stringified regex matching packages to use when getting any caller
 information (including stacktrace.)  Typically this will be used to B<exclude>
-things from the stack.  For example, to exclue L<DBIx::Class> and
-L<SQL::Abstract> from your call stack you'd do:
+things from the caller information.  So to exclue L<DBIx::Class> and
+L<SQL::Abstract> from your caller information:
 
  caller_clan => '^DBIx::Class|^SQL::Abstract',
 
@@ -195,16 +195,16 @@ info, warn, error, or fatal.
 
 =head2 start_time
 
-Returns an ArrayRef containing the time the object was instantiated
+Returns an C<ArrayRef> containing the time the object was instantiated
 
 =head2 last_event
 
-Returns an ArrayRef containing the last time a log event occurred
+Returns an C<ArrayRef>h containing the last time a log event occurred
 
 =head2 caller_depth
 
-An integer caller levels to skip when getting any caller information (including
-stacktrace.)
+An integer caller levels to skip when getting any caller information (not
+including stacktrace.)
 
 =head1 ATTRIBUTES TO ENABLE LOG DATA
 
@@ -295,10 +295,9 @@ caller in list context
 
 =head1 SEE ALSO
 
-Before initial release, all of the code from this module was actually part of
-L<Log::Sprintf>.  Unsurprisingly, this module continues to work extremely well
-with C<Log::Sprintf>.  For example, the L</SYNOPSIS>' example of instantiation
-could be rewritten as:
+During initial development all the code from this module was part of
+L<Log::Sprintf>.  This module continues to work with C<Log::Sprintf>.
+For example the L</SYNOPSIS>' example of instantiation could be rewritten as:
 
  use Log::Structured;
  use Log::Sprintf;
