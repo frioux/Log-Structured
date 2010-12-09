@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Take into account fewer caller return vals in 5.8
 
 0.001000  2010-12-07 22:58:04 CST6CDT
   - Initial Release

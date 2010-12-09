@@ -29,6 +29,11 @@ sub biff {
    $l_s->log_event({ message => 'deep' });
 }
 
+my $flags = ($] >= 5.010
+  ? 7
+  : 6
+);
+
 foo();
 
 # It's silly to test line number.  subroutine is just as unique and way more
@@ -39,7 +44,7 @@ cmp_deeply( $var[0], {
    line     => ignore(),
    subroutine => 'Log::Structured::log_event',
    stacktrace => [
-      [ __PACKAGE__, __FILE__, ignore(), 'Log::Structured::log_event', ( ignore() ) x 7],
+      [ __PACKAGE__, __FILE__, ignore(), 'Log::Structured::log_event', ( ignore() ) x $flags],
    ],
    message  => 'shallow',
 }, 'Shallow log event works');
@@ -50,11 +55,11 @@ cmp_deeply( $var[1], {
    line     => ignore(),
    subroutine => 'Log::Structured::log_event',
    stacktrace => [
-      [ __PACKAGE__, __FILE__, ignore(), 'Log::Structured::log_event', ( ignore() ) x 7],
-      [ __PACKAGE__, __FILE__, ignore(), 'main::biff', ( ignore() ) x 7],
-      [ __PACKAGE__, __FILE__, ignore(), 'main::baz', ( ignore() ) x 7],
-      [ __PACKAGE__, __FILE__, ignore(), 'main::bar', ( ignore() ) x 7],
-      [ __PACKAGE__, __FILE__, ignore(), 'main::foo', ( ignore() ) x 7],
+      [ __PACKAGE__, __FILE__, ignore(), 'Log::Structured::log_event', ( ignore() ) x $flags],
+      [ __PACKAGE__, __FILE__, ignore(), 'main::biff', ( ignore() ) x $flags],
+      [ __PACKAGE__, __FILE__, ignore(), 'main::baz', ( ignore() ) x $flags],
+      [ __PACKAGE__, __FILE__, ignore(), 'main::bar', ( ignore() ) x $flags],
+      [ __PACKAGE__, __FILE__, ignore(), 'main::foo', ( ignore() ) x $flags],
    ],
    message  => 'deep',
 }, 'Deep log event works');
