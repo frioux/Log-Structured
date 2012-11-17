@@ -32,7 +32,7 @@ ok !exception { Log::Structured->new({ log_event_listeners => [sub {}] }) },
    'log_event_listener passes through correctly';
 
 like exception { Log::Structured->new({ log_event_listeners => [sub {},1] }) },
-   qr/^each log_event_listener must be a coderef!/,
+   qr/each log_event_listener must be a coderef!/,
    'log_event_listener is validated correctly';
 
 $l_s->log_event({
