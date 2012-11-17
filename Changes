@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+0.001002  2012-11-17 17:03:43 CST6CDT
+  - Put MetaYAML back in dist
+
 0.001001  2010-12-09 13:39:45 CST6CDT
   - Take into account fewer caller return vals in 5.8
 
