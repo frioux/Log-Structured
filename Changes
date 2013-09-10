@@ -1,6 +1,7 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Abandon RT
   - Fix deps
 
 0.001002  2012-11-17 17:03:43 CST6CDT
